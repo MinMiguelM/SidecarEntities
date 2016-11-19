@@ -8,6 +8,7 @@ package logica;
 import entities.Plato;
 import entities.Transaccion;
 import entities.Usuario;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -34,5 +35,5 @@ public interface TransaccionFacadeRemote {
     
     int pago(Usuario user, List<Plato> platos);
 
-    
+    List<Transaccion> getTransacciones(String date);
 }

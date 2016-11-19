@@ -19,4 +19,7 @@ public interface ConexionBeanRemote {
     
     List<Plato> getPlatos(String busqueda);
     int pago(Usuario user, List<Plato> platos);
+    boolean eliminarPlato(Plato p);
+    Plato getPlatoByName (String busq);
+    void editarPlato(Plato p);
 }

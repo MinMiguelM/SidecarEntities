@@ -32,4 +32,6 @@ public interface PlatoFacadeRemote {
     
     List<Plato> getPlatos(String busqueda);
     
+    Plato getPlatoByName(String busqueda);
+    
 }

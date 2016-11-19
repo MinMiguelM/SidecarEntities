@@ -6,16 +6,17 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -26,24 +27,38 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "USUARIO")
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByCedula", query = "SELECT u FROM Usuario u WHERE u.cedula = :cedula"),
+    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
+    @NamedQuery(name = "Usuario.findByUsuariomispagos", query = "SELECT u FROM Usuario u WHERE u.usuariomispagos = :usuariomispagos"),
+    @NamedQuery(name = "Usuario.findByPasswordmispagos", query = "SELECT u FROM Usuario u WHERE u.passwordmispagos = :passwordmispagos"),
+    @NamedQuery(name = "Usuario.findByFechaNacimiento", query = "SELECT u FROM Usuario u WHERE u.fechaNacimiento = :fechaNacimiento")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
     @Column(name = "CEDULA")
     private String cedula;
+    @Size(max = 250)
     @Column(name = "NOMBRE")
     private String nombre;
+    @Size(max = 250)
     @Column(name = "CORREO")
     private String correo;
+    @Size(max = 250)
     @Column(name = "USUARIOMISPAGOS")
     private String usuariomispagos;
+    @Size(max = 250)
     @Column(name = "PASSWORDMISPAGOS")
     private String passwordmispagos;
+    @Size(max = 20)
     @Column(name = "FECHA_NACIMIENTO")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
     @OneToMany(mappedBy = "cedulaUsuario")
     private List<Transaccion> transaccionList;
 
@@ -94,11 +109,11 @@ public class Usuario implements Serializable {
         this.passwordmispagos = passwordmispagos;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
