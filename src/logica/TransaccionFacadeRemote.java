@@ -33,6 +33,8 @@ public interface TransaccionFacadeRemote {
 
     int count();
     
+    List<Transaccion> getTransaccionByUsuario(String cedula);
+    
     int pago(Usuario user, List<Plato> platos);
 
     List<Transaccion> getTransacciones(String date);

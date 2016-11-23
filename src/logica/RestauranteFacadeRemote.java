@@ -32,5 +32,5 @@ public interface RestauranteFacadeRemote {
     
     List<Restaurante> getRestaurantes(String busqueda);
 
-    
+    Restaurante getByName(String busq);
 }

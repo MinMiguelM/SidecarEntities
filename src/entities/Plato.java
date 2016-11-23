@@ -55,16 +55,10 @@ public class Plato implements Serializable {
     @Size(max = 500)
     @Column(name = "DESCRIPCION")
     private String descripcion;
-    @JoinTable(name = "PLATOXRESTAURANTE", joinColumns = {
-        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "ID_RESTAURANTE", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Restaurante> restauranteList;
-    @JoinTable(name = "PLATOXTRANSACCION", joinColumns = {
-        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "NUM_TRANSACCION", referencedColumnName = "NUM_TRANSACCION")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "platoList")
     private List<Transaccion> transaccionList;
+    @ManyToMany(mappedBy = "platoList")
+    private List<Restaurante> restauranteList;
 
     public Plato() {
     }
@@ -106,21 +100,21 @@ public class Plato implements Serializable {
     }
 
     @XmlTransient
-    public List<Restaurante> getRestauranteList() {
-        return restauranteList;
-    }
-
-    public void setRestauranteList(List<Restaurante> restauranteList) {
-        this.restauranteList = restauranteList;
-    }
-
-    @XmlTransient
     public List<Transaccion> getTransaccionList() {
         return transaccionList;
     }
 
     public void setTransaccionList(List<Transaccion> transaccionList) {
         this.transaccionList = transaccionList;
+    }
+
+    @XmlTransient
+    public List<Restaurante> getRestauranteList() {
+        return restauranteList;
+    }
+
+    public void setRestauranteList(List<Restaurante> restauranteList) {
+        this.restauranteList = restauranteList;
     }
 
     @Override

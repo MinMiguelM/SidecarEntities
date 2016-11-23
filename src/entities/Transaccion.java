@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Transaccion.findAll", query = "SELECT t FROM Transaccion t"),
     @NamedQuery(name = "Transaccion.findByNumTransaccion", query = "SELECT t FROM Transaccion t WHERE t.numTransaccion = :numTransaccion"),
     @NamedQuery(name = "Transaccion.findByFecha", query = "SELECT t FROM Transaccion t WHERE t.fecha = :fecha"),
+    @NamedQuery(name = "Transaccion.findByUsuario", query = "SELECT t FROM Transaccion t WHERE t.cedulaUsuario.cedula = :cedula"),
     @NamedQuery(name = "Transaccion.findByValor", query = "SELECT t FROM Transaccion t WHERE t.valor = :valor")})
 public class Transaccion implements Serializable {
 
@@ -50,7 +52,10 @@ public class Transaccion implements Serializable {
     private String fecha;
     @Column(name = "VALOR")
     private BigInteger valor;
-    @ManyToMany(mappedBy = "transaccionList")
+    @JoinTable(name = "TRANSACCIONXPLATO", joinColumns = {
+        @JoinColumn(name = "NUM_TRANSACCION", referencedColumnName = "NUM_TRANSACCION")}, inverseJoinColumns = {
+        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")})
+    @ManyToMany
     private List<Plato> platoList;
     @JoinColumn(name = "CEDULA_USUARIO", referencedColumnName = "CEDULA")
     @ManyToOne

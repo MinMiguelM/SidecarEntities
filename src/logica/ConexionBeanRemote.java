@@ -26,4 +26,7 @@ public interface ConexionBeanRemote {
     void agregarPlato(Plato p);
     void editarRestaurante(Restaurante r);
     List<Restaurante> getRestaurantes(String busqueda);
+    void agregarRestaurante(Restaurante r);
+    boolean eliminarRest(Restaurante r);
+    Restaurante getRestauranteByName(String busq);
 }
