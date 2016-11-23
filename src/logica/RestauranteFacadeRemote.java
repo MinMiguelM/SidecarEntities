@@ -30,4 +30,7 @@ public interface RestauranteFacadeRemote {
 
     int count();
     
+    List<Restaurante> getRestaurantes(String busqueda);
+
+    
 }

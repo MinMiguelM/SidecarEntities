@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r"),
+    @NamedQuery(name = "Restaurante.findSimilar", query = "SELECT r FROM Restaurante r WHERE r.nombre like :nombre"),
     @NamedQuery(name = "Restaurante.findById", query = "SELECT r FROM Restaurante r WHERE r.id = :id"),
     @NamedQuery(name = "Restaurante.findByDireccion", query = "SELECT r FROM Restaurante r WHERE r.direccion = :direccion"),
     @NamedQuery(name = "Restaurante.findByDescripccion", query = "SELECT r FROM Restaurante r WHERE r.descripccion = :descripccion"),

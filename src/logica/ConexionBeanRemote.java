@@ -6,6 +6,7 @@
 package logica;
 
 import entities.Plato;
+import entities.Restaurante;
 import entities.Usuario;
 import java.util.List;
 import javax.ejb.Remote;
@@ -22,4 +23,7 @@ public interface ConexionBeanRemote {
     boolean eliminarPlato(Plato p);
     Plato getPlatoByName (String busq);
     void editarPlato(Plato p);
+    void agregarPlato(Plato p);
+    void editarRestaurante(Restaurante r);
+    List<Restaurante> getRestaurantes(String busqueda);
 }
