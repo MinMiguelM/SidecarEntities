@@ -12,11 +12,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sala-a
+ * @author SALABD
  */
 @Entity
 @Table(name = "RESTAURANTE")
@@ -34,9 +32,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r"),
     @NamedQuery(name = "Restaurante.findSimilar", query = "SELECT r FROM Restaurante r WHERE r.nombre like :nombre"),
     @NamedQuery(name = "Restaurante.findById", query = "SELECT r FROM Restaurante r WHERE r.id = :id"),
-    @NamedQuery(name = "Restaurante.findByDireccion", query = "SELECT r FROM Restaurante r WHERE r.direccion = :direccion"),
-    @NamedQuery(name = "Restaurante.findByDescripccion", query = "SELECT r FROM Restaurante r WHERE r.descripccion = :descripccion"),
-    @NamedQuery(name = "Restaurante.findByNombre", query = "SELECT r FROM Restaurante r WHERE r.nombre = :nombre")})
+    @NamedQuery(name = "Restaurante.findByDescripcion", query = "SELECT r FROM Restaurante r WHERE r.descripcion = :descripcion"),
+    @NamedQuery(name = "Restaurante.findByNombre", query = "SELECT r FROM Restaurante r WHERE r.nombre = :nombre"),
+    @NamedQuery(name = "Restaurante.findByDireccion", query = "SELECT r FROM Restaurante r WHERE r.direccion = :direccion")})
 public class Restaurante implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,18 +45,15 @@ public class Restaurante implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Size(max = 250)
-    @Column(name = "DIRECCION")
-    private String direccion;
-    @Size(max = 500)
-    @Column(name = "DESCRIPCCION")
-    private String descripccion;
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
     @Size(max = 250)
     @Column(name = "NOMBRE")
     private String nombre;
-    @JoinTable(name = "RESTAURANTEXPLATO", joinColumns = {
-        @JoinColumn(name = "ID_RESTAURANTE", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")})
-    @ManyToMany
+    @Size(max = 250)
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @OneToMany(mappedBy = "idRestaurante")
     private List<Plato> platoList;
 
     public Restaurante() {
@@ -76,20 +71,12 @@ public class Restaurante implements Serializable {
         this.id = id;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getDescripccion() {
-        return descripccion;
-    }
-
-    public void setDescripccion(String descripccion) {
-        this.descripccion = descripccion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getNombre() {
@@ -98,6 +85,14 @@ public class Restaurante implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     @XmlTransient

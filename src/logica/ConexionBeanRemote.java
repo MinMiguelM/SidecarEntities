@@ -23,10 +23,11 @@ public interface ConexionBeanRemote {
     boolean eliminarPlato(Plato p);
     Plato getPlatoByName (String busq);
     void editarPlato(Plato p);
-    void agregarPlato(Plato p);
+    void agregarPlato(Plato p, Restaurante r);
     void editarRestaurante(Restaurante r);
     List<Restaurante> getRestaurantes(String busqueda);
     void agregarRestaurante(Restaurante r);
     boolean eliminarRest(Restaurante r);
     Restaurante getRestauranteByName(String busq);
+    Usuario findUsuario(String tipo, int numero);
 }

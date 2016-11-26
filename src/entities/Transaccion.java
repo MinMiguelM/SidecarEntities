@@ -14,7 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -27,16 +27,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sala-a
+ * @author SALABD
  */
 @Entity
 @Table(name = "TRANSACCION")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Transaccion.findAll", query = "SELECT t FROM Transaccion t"),
+    @NamedQuery(name = "Transaccion.findByUsuario", query = "SELECT t FROM Transaccion t WHERE t.usuario.usuarioPK.numDocumento = :numDocumento and t.usuario.usuarioPK.tipoDocumento = :tipoDocumento"),
     @NamedQuery(name = "Transaccion.findByNumTransaccion", query = "SELECT t FROM Transaccion t WHERE t.numTransaccion = :numTransaccion"),
     @NamedQuery(name = "Transaccion.findByFecha", query = "SELECT t FROM Transaccion t WHERE t.fecha = :fecha"),
-    @NamedQuery(name = "Transaccion.findByUsuario", query = "SELECT t FROM Transaccion t WHERE t.cedulaUsuario.cedula = :cedula"),
     @NamedQuery(name = "Transaccion.findByValor", query = "SELECT t FROM Transaccion t WHERE t.valor = :valor")})
 public class Transaccion implements Serializable {
 
@@ -47,19 +47,18 @@ public class Transaccion implements Serializable {
     @NotNull
     @Column(name = "NUM_TRANSACCION")
     private BigDecimal numTransaccion;
-    @Size(max = 20)
+    @Size(max = 250)
     @Column(name = "FECHA")
     private String fecha;
     @Column(name = "VALOR")
     private BigInteger valor;
-    @JoinTable(name = "TRANSACCIONXPLATO", joinColumns = {
-        @JoinColumn(name = "NUM_TRANSACCION", referencedColumnName = "NUM_TRANSACCION")}, inverseJoinColumns = {
-        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "transaccionList")
     private List<Plato> platoList;
-    @JoinColumn(name = "CEDULA_USUARIO", referencedColumnName = "CEDULA")
+    @JoinColumns({
+        @JoinColumn(name = "NUMDOC_USUARIO", referencedColumnName = "NUM_DOCUMENTO"),
+        @JoinColumn(name = "TIPO_DOCUMENTO", referencedColumnName = "TIPO_DOCUMENTO")})
     @ManyToOne
-    private Usuario cedulaUsuario;
+    private Usuario usuario;
 
     public Transaccion() {
     }
@@ -101,12 +100,12 @@ public class Transaccion implements Serializable {
         this.platoList = platoList;
     }
 
-    public Usuario getCedulaUsuario() {
-        return cedulaUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCedulaUsuario(Usuario cedulaUsuario) {
-        this.cedulaUsuario = cedulaUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override

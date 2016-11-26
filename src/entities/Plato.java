@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sala-a
+ * @author SALABD
  */
 @Entity
 @Table(name = "PLATO")
@@ -36,8 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Plato.findById", query = "SELECT p FROM Plato p WHERE p.id = :id"),
     @NamedQuery(name = "Plato.findSimilar", query = "SELECT p FROM Plato p WHERE p.nombre like :nombre"),
     @NamedQuery(name = "Plato.findByNombre", query = "SELECT p FROM Plato p WHERE p.nombre = :nombre"),
-    @NamedQuery(name = "Plato.findByPrecio", query = "SELECT p FROM Plato p WHERE p.precio = :precio"),
-    @NamedQuery(name = "Plato.findByDescripcion", query = "SELECT p FROM Plato p WHERE p.descripcion = :descripcion")})
+    @NamedQuery(name = "Plato.findByDescripcion", query = "SELECT p FROM Plato p WHERE p.descripcion = :descripcion"),
+    @NamedQuery(name = "Plato.findByPrecio", query = "SELECT p FROM Plato p WHERE p.precio = :precio")})
 public class Plato implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,15 +51,19 @@ public class Plato implements Serializable {
     @Size(max = 250)
     @Column(name = "NOMBRE")
     private String nombre;
-    @Column(name = "PRECIO")
-    private BigInteger precio;
-    @Size(max = 500)
+    @Size(max = 250)
     @Column(name = "DESCRIPCION")
     private String descripcion;
-    @ManyToMany(mappedBy = "platoList")
+    @Column(name = "PRECIO")
+    private BigInteger precio;
+    @JoinTable(name = "TRANSACCIONXPLATO", joinColumns = {
+        @JoinColumn(name = "ID_PLATO", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "NUM_TRANSACCION", referencedColumnName = "NUM_TRANSACCION")})
+    @ManyToMany
     private List<Transaccion> transaccionList;
-    @ManyToMany(mappedBy = "platoList")
-    private List<Restaurante> restauranteList;
+    @JoinColumn(name = "ID_RESTAURANTE", referencedColumnName = "ID")
+    @ManyToOne
+    private Restaurante idRestaurante;
 
     public Plato() {
     }
@@ -83,20 +88,20 @@ public class Plato implements Serializable {
         this.nombre = nombre;
     }
 
-    public BigInteger getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigInteger precio) {
-        this.precio = precio;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public BigInteger getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigInteger precio) {
+        this.precio = precio;
     }
 
     @XmlTransient
@@ -108,13 +113,12 @@ public class Plato implements Serializable {
         this.transaccionList = transaccionList;
     }
 
-    @XmlTransient
-    public List<Restaurante> getRestauranteList() {
-        return restauranteList;
+    public Restaurante getIdRestaurante() {
+        return idRestaurante;
     }
 
-    public void setRestauranteList(List<Restaurante> restauranteList) {
-        this.restauranteList = restauranteList;
+    public void setIdRestaurante(Restaurante idRestaurante) {
+        this.idRestaurante = idRestaurante;
     }
 
     @Override

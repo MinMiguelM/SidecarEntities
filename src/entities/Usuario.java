@@ -6,31 +6,30 @@
 package entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sala-a
+ * @author SALABD
  */
 @Entity
 @Table(name = "USUARIO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByCedula", query = "SELECT u FROM Usuario u WHERE u.cedula = :cedula"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.findByNumDocumento", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.numDocumento = :numDocumento"),
+    @NamedQuery(name = "Usuario.findByTipoDocumento", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.tipoDocumento = :tipoDocumento"),
     @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
     @NamedQuery(name = "Usuario.findByUsuariomispagos", query = "SELECT u FROM Usuario u WHERE u.usuariomispagos = :usuariomispagos"),
     @NamedQuery(name = "Usuario.findByPasswordmispagos", query = "SELECT u FROM Usuario u WHERE u.passwordmispagos = :passwordmispagos"),
@@ -38,15 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "CEDULA")
-    private String cedula;
-    @Size(max = 250)
-    @Column(name = "NOMBRE")
-    private String nombre;
+    @EmbeddedId
+    protected UsuarioPK usuarioPK;
     @Size(max = 250)
     @Column(name = "CORREO")
     private String correo;
@@ -56,33 +48,29 @@ public class Usuario implements Serializable {
     @Size(max = 250)
     @Column(name = "PASSWORDMISPAGOS")
     private String passwordmispagos;
-    @Size(max = 20)
+    @Size(max = 250)
     @Column(name = "FECHA_NACIMIENTO")
     private String fechaNacimiento;
-    @OneToMany(mappedBy = "cedulaUsuario")
+    @OneToMany(mappedBy = "usuario")
     private List<Transaccion> transaccionList;
 
     public Usuario() {
     }
 
-    public Usuario(String cedula) {
-        this.cedula = cedula;
+    public Usuario(UsuarioPK usuarioPK) {
+        this.usuarioPK = usuarioPK;
     }
 
-    public String getCedula() {
-        return cedula;
+    public Usuario(BigInteger numDocumento, String tipoDocumento) {
+        this.usuarioPK = new UsuarioPK(numDocumento, tipoDocumento);
     }
 
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
+    public UsuarioPK getUsuarioPK() {
+        return usuarioPK;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUsuarioPK(UsuarioPK usuarioPK) {
+        this.usuarioPK = usuarioPK;
     }
 
     public String getCorreo() {
@@ -129,7 +117,7 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cedula != null ? cedula.hashCode() : 0);
+        hash += (usuarioPK != null ? usuarioPK.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +128,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.cedula == null && other.cedula != null) || (this.cedula != null && !this.cedula.equals(other.cedula))) {
+        if ((this.usuarioPK == null && other.usuarioPK != null) || (this.usuarioPK != null && !this.usuarioPK.equals(other.usuarioPK))) {
             return false;
         }
         return true;
@@ -148,7 +136,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Usuario[ cedula=" + cedula + " ]";
+        return "entities.Usuario[ usuarioPK=" + usuarioPK + " ]";
     }
     
 }
